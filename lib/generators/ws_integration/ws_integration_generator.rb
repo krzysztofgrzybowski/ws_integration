@@ -6,7 +6,7 @@ module WsIntegration
 
     argument :class_name, type: :string, default: "user"
 
-    def cerate_model
+    def create_migration
       generate "migration", "create_worksnaps_user worksnaps_id:integer #{class_name.downcase}:references"
     end
   end
