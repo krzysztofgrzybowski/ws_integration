@@ -8,7 +8,7 @@ module WsIntegration
     argument :token, type: :string, default: "YOUR_WORKSNAPS_TOKEN"
 
     def create_migration
-      generate "migration", "create_worksnaps_user worksnaps_id:integer #{class_name.downcase}:references"
+      generate "model", "create_worksnaps_user worksnaps_id:integer #{class_name.downcase}:references --no-assets --no-test-framework"
     end
 
     def add_config
