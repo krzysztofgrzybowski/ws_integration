@@ -4,7 +4,7 @@ module WsIntegration
 
     source_root File.expand_path("../templates", __FILE__)
 
-    argument :class_name, type: :string, default: "user"
+    argument :class_name, type: :string, default: "User"
     argument :token, type: :string, default: "YOUR_WORKSNAPS_TOKEN"
 
     def create_migration
