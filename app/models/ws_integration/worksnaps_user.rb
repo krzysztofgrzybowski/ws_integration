@@ -29,5 +29,25 @@ module WsIntegration
         return [api_response[0], api_response[1], api_response[2], api_response[3], api_response[4]]
       end
     end
+
+    def self.add_time(user, project_id, task_id, from_time, minutes)
+      ws_user = WorksnapsUser.find_by(user_id: user.id)
+      request_body = add_time_request_body
+      puts request_body
+      # HTTP.basic_auth(user: Rails.configuration.x.worksnaps_token, pass: '')
+      #     .post("https://api.worksnaps.com/api/projects/#{project_id}/users/#{ws_user.worksnaps_id}/time_entries.xml",
+      #     body: )
+    end
+
+    private
+
+    def self.add_time_request_body
+      return "<time_entry>\n"\
+             "  <task_id></task_id>\n"\
+             "  <user_comment></user_comment>\n"\
+             "  <from_timestamp></from_timestamp>\n"\
+             "  <duration_in_minutes></duration_in_minutes>\n"\
+             "</time_entry>"
+    end
   end
 end
