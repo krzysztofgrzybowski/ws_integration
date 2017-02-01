@@ -26,7 +26,7 @@ module WsIntegration
         api_response = HTTP.basic_auth(user: Rails.configuration.x.worksnaps_token, pass: '')
                            .get("https://api.worksnaps.com/api/users/#{ws_user.worksnaps_id}.xml").body
         api_response = Nokogiri::XML(api_response).xpath("//user").text.split
-        puts api_response
+        return [api_response[0], api_response[1], api_response[2], api_response[3], api_response[4]]
       end
     end
   end
