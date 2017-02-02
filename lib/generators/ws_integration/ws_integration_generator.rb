@@ -7,12 +7,13 @@ module WsIntegration
     argument :class_name, type: :string, default: "User"
 
     def create_migration
-      generate "migration", "create_ws_integration_worksnaps_user worksnaps_id:integer #{class_name.downcase}:references --no-assets --no-test-framework"
+      generate "migration", "add_worksnaps_id_to_#{class_name.underscore} worksnaps_id:integer"
     end
 
     def add_config
       create_file "config/initializers/ws_integration.rb" do
-       "Rails.configuration.x.user_class_name = '#{class_name}'\nRails.configuration.x.worksnaps_token = 'YOUR_WORKSNAPS_TOKEN'"
+       "Rails.configuration.x.user_class_name = '#{class_name}'\n"\
+       "Rails.configuration.x.worksnaps_token = 'YOUR_WORKSNAPS_TOKEN'"
       end
     end
   end
