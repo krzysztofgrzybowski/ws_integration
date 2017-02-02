@@ -21,34 +21,31 @@ module WsIntegration
       end
     end
 
-    # def get_worksnaps_data
-    #   ws_user = WorksnapsUser.find_by(user_id: user.id)
-    #   if ws_user
-    #     api_response = HTTP.basic_auth(user: Rails.configuration.x.worksnaps_token, pass: '')
-    #                        .get("https://api.worksnaps.com/api/users/#{ws_user.worksnaps_id}.xml").body
-    #     api_response = Nokogiri::XML(api_response).xpath("//user").text.split
-    #     return [api_response[0], api_response[1], api_response[2], api_response[3], api_response[4]]
-    #   end
-    # end
-    #
-    # def self.add_time(user, project_id, task_id, from_time, minutes)
-    #   ws_user = WorksnapsUser.find_by(user_id: user.id)
-    #   request_body = add_time_request_body
-    #   puts request_body
-    #   # HTTP.basic_auth(user: Rails.configuration.x.worksnaps_token, pass: '')
-    #   #     .post("https://api.worksnaps.com/api/projects/#{project_id}/users/#{ws_user.worksnaps_id}/time_entries.xml",
-    #   #     body: )
-    # end
-    #
-    # private
-    #
-    # def add_time_request_body
-    #   return "<time_entry>\n"\
-    #          "  <task_id></task_id>\n"\
-    #          "  <user_comment></user_comment>\n"\
-    #          "  <from_timestamp></from_timestamp>\n"\
-    #          "  <duration_in_minutes></duration_in_minutes>\n"\
-    #          "</time_entry>"
-    # end
+    def get_worksnaps_data
+      if self.worksnaps_id
+        api_response = HTTP.basic_auth(user: Rails.configuration.x.worksnaps_token, pass: '')
+                           .get("https://api.worksnaps.com/api/users/#{self.worksnaps_id}.xml").body
+        api_response = Nokogiri::XML(api_response).xpath("//user").text.split
+        return [api_response[0], api_response[1], api_response[2], api_response[3], api_response[4]]
+      end
+    end
+
+    def add_worksnaps_time(project_id, task_id, from_timestamp, minutes, comment = '')
+      request_body = add_time_request_body(task_id, from_timestamp, minutes, comment)
+      url = "https://api.worksnaps.com/api/projects/#{project_id}/users/#{self.worksnaps_id}/time_entries.xml"
+      response = HTTP.basic_auth(user: Rails.configuration.x.worksnaps_token, pass: '')
+                     .post(url, body: request_body)
+    end
+
+    private
+
+    def add_time_request_body(task_id, from_timestamp, minutes, comment)
+      return "<time_entry>\n"\
+             "  <task_id>#{task_id}</task_id>\n"\
+             "  <user_comment>#{comment}</user_comment>\n"\
+             "  <from_timestamp>#{from_timestamp}</from_timestamp>\n"\
+             "  <duration_in_minutes>#{minutes}</duration_in_minutes>\n"\
+             "</time_entry>"
+    end
   end
 end
