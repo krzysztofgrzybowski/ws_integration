@@ -1,5 +1,5 @@
 # WsIntegration
-Gem helps with integrating Rails application with Worksnaps.
+Gem helps integrating Rails application with Worksnaps.
 
 ## Installation
 Add this line to your application's Gemfile:
@@ -24,11 +24,11 @@ Generator creates initializer file inside /config/initializers/ws_integration.rb
 Rails.configuration.x.user_class_name = 'User'
 Rails.configuration.x.worksnaps_token = 'YOUR_WORKSNAPS_TOKEN'
 ```
-Put you Worksnaps token here. Remember to keep it safe!
-After changing class name use generator again to create new migration.
+Put your Worksnaps token here. Remember to keep it safe!
+In case of changing class name use generator again to create new migration.
 
 ## Usage
-Gem adds few functions inside your user class:
+Gem adds few methods inside your user class:
 
 To synchronize all your users:
 ```ruby
@@ -37,12 +37,13 @@ User.synchronize_with_worksnaps
 
 To get single user data from Worksnaps:
 ```ruby
-get_worksnaps_data
+@user.get_worksnaps_data()
 ```
+Method returns array [ 'worksnaps_id', 'user_name', 'name', 'surname', 'email' ]
 
 To add Worksnaps time for user:
 ```ruby
-add_worksnaps_time(project_id, task_id, from_timestamp, minutes, comment)
+@user.add_worksnaps_time(project_id, task_id, from_timestamp, minutes, comment)
 ```
 
 ## Contributing
