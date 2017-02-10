@@ -26,7 +26,7 @@ module WsIntegration
         api_response = HTTP.basic_auth(user: Rails.configuration.x.worksnaps_token, pass: '')
                            .get("https://api.worksnaps.com/api/users/#{self.worksnaps_id}.xml").body
         api_response = Nokogiri::XML(api_response).xpath("//user").text.split
-        return [api_response[0], api_response[1], api_response[2], api_response[3], api_response[4]]
+        return api_response
       end
     end
 
@@ -35,6 +35,20 @@ module WsIntegration
       url = "https://api.worksnaps.com/api/projects/#{project_id}/users/#{self.worksnaps_id}/time_entries.xml"
       response = HTTP.basic_auth(user: Rails.configuration.x.worksnaps_token, pass: '')
                      .post(url, body: request_body)
+    end
+
+    def delete_worksnaps_time(project_id, from_timestamp, to_timestamp)
+      time_entries_url = "https://api.worksnaps.com/api/projects/#{project_id}/users/#{self.worksnaps_id}/time_entries.xml"
+      time_entries_response = HTTP.basic_auth(user: Rails.configuration.x.worksnaps_token, pass: '')
+                     .get(time_entries_url, params: { from_timestamp: from_timestamp, to_timestamp: to_timestamp })
+      ids = Nokogiri::XML(time_entries_response).xpath("//time_entry//id")
+      delete_url = "https://api.worksnaps.com/api/projects/#{project_id}/time_entries/"
+      ids.each do |id|
+        delete_url += id.text + ';'
+      end
+      delete_url = delete_url.chop + ".xml"
+      delete_response = HTTP.basic_auth(user: get_worksnaps_data[7], pass: '')
+                                  .delete(delete_url)
     end
 
     private
@@ -46,6 +60,10 @@ module WsIntegration
              "  <from_timestamp>#{from_timestamp}</from_timestamp>\n"\
              "  <duration_in_minutes>#{minutes}</duration_in_minutes>\n"\
              "</time_entry>"
+    end
+
+    def delete_time_request_body
+      return
     end
   end
 end
