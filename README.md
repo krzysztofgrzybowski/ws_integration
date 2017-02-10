@@ -27,6 +27,11 @@ Rails.configuration.x.worksnaps_token = 'YOUR_WORKSNAPS_TOKEN'
 Put your Worksnaps token here. Remember to keep it safe!
 In case of changing class name use generator again to create new migration.
 
+Insert this include inside your model class:
+```ruby
+include WsIntegration::WorksnapsUser
+```
+
 ## Usage
 Gem adds few methods inside your user class:
 
