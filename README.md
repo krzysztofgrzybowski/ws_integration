@@ -52,7 +52,7 @@ To add Worksnaps time for user:
 ```
 
 ## Contributing
-Contact me: krzysztof.grzybowski@polcode.net
+Contact me: grzybowski.krzysiek@gmail.com
 
 ## License
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
